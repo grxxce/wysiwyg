@@ -96,8 +96,7 @@ const MathBox = forwardRef(({ obj, index, dispatch }: MathBox, ref) => {
         });
         }
     };
-
-
+    
     // State var to track last key
 
     const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLElement>) => {
@@ -135,27 +134,26 @@ const MathBox = forwardRef(({ obj, index, dispatch }: MathBox, ref) => {
         <div>
             <button onClick={() => setUseLexerParser(!useLexerParser)}
                 style={{
-                    backgroundColor: "#FFFFFF", // Green background
-                    color: "black", // White text
-                    padding: "6px 10px", // Padding around the text
-                    border: "2px", // No border
-                    borderRadius: "2px", // Rounded corners
-                    cursor: "pointer", // Pointer cursor on hover
-                    marginTop: "10px", // Margin around the button
-                    marginBottom: "10px", // Margin around the button
-                    marginLeft: "2px", // Margin around the button
-                    fontSize: "16px", // Text size
-                    outline: "3px solid #F8D16D", // Darker green outline
-                    // outlineOffset: "2px", // Space between border and outline
-                    transition: "background-color 0.3s, outline-color 0.3s", // Smooth transition for hover effects
+                    backgroundColor: "#FFFFFF", 
+                    color: "black",
+                    padding: "6px 10px", 
+                    border: "2px", 
+                    borderRadius: "2px", 
+                    cursor: "pointer", 
+                    marginTop: "10px", 
+                    marginBottom: "10px", 
+                    marginLeft: "2px", 
+                    fontSize: "16px", 
+                    outline: "3px solid #F8D16D", 
+                    transition: "background-color 0.3s, outline-color 0.3s", 
                 }}
                 onMouseOver={e => {
-                    e.currentTarget.style.backgroundColor = "#F5E6C0"; // Darker yellow on hover
-                    e.currentTarget.style.outlineColor = "#F8D16D"; // Even darker yellow outline on hover
+                    e.currentTarget.style.backgroundColor = "#F5E6C0"; 
+                    e.currentTarget.style.outlineColor = "#F8D16D"; 
                 }}
                 onMouseOut={e => {
-                    e.currentTarget.style.backgroundColor = "#FFFFFF"; // Reset to original green
-                    e.currentTarget.style.outlineColor = "#F8D16D"; // Reset to original outline color
+                    e.currentTarget.style.backgroundColor = "#FFFFFF"; 
+                    e.currentTarget.style.outlineColor = "#F8D16D"; 
                 }}
             >
                 {useLexerParser ? "Using Lexer and Parser: Click to Use Regex" : "Using Regex: Click to Use Lexer + Parser"}
