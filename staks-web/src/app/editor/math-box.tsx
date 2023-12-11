@@ -27,6 +27,7 @@ const MathBox = forwardRef(({ obj, index, dispatch }: MathBox, ref) => {
     const [focusedField, setFocusedField] = useState<number | null>(null);
     const [mathFields, setMathFields] = useState<string[]>(['']);
     const [prevMathFields, setPrevMathFields] = useState<string[]>([]);
+    const [useLexerParser, setUseLexerParser] = useState(false); // New state for toggling the method
 
     // Update prevMathFields whenever mathFields changes
     useEffect(() => {
@@ -34,19 +35,18 @@ const MathBox = forwardRef(({ obj, index, dispatch }: MathBox, ref) => {
     }, [mathFields]);
 
     const downloadTexFile = () => {
-        // Join all mathFields into a single LaTeX formatted string, add a newline at the end
         let latexContent = mathFields.join('\n') + "\n";
 
-        latexContent = parseLatexContent(latexContent);
-
-        // REGEX IMPLEMENTATION
-        // // Replace "• text" with "\textbullet{} text \\"
-        // latexContent = latexContent.replace(/•\s*(.*?)\n/g, "\\textbullet{} $1 \\\\\n");
-
-        // // Replace "(x) text" patterns
-        // latexContent = latexContent.replace(/\((\d+)\)\s*(.*?)\n/gs, (match, number, text) => {
-        //     return `\\begin{enumerate}\n\\setcounter{enumi}{${number-1}}\n\\item ${text}\n\\end{enumerate}\n`;
-        // });
+        if (useLexerParser) {
+            // Lexer + Parser implementation
+            latexContent = parseLatexContent(latexContent);
+        } else {
+            // Regex implementation
+            latexContent = latexContent.replace(/•\s*(.*?)\n/g, "\\textbullet{} $1 \\\\\n");
+            latexContent = latexContent.replace(/\((\d+)\)\s*(.*?)\n/gs, (match, number, text) => {
+                return `\\begin{enumerate}\n\\setcounter{enumi}{${number-1}}\n\\item ${text}\n\\end{enumerate}\n`;
+            });
+        }
 
         // Create a blob from the LaTeX content
         const blob = new Blob([latexContent], { type: 'text/plain;charset=utf-8' });
@@ -133,6 +133,33 @@ const MathBox = forwardRef(({ obj, index, dispatch }: MathBox, ref) => {
 
     return (
         <div>
+            <button onClick={() => setUseLexerParser(!useLexerParser)}
+                style={{
+                    backgroundColor: "#FFFFFF", // Green background
+                    color: "black", // White text
+                    padding: "6px 10px", // Padding around the text
+                    border: "2px", // No border
+                    borderRadius: "2px", // Rounded corners
+                    cursor: "pointer", // Pointer cursor on hover
+                    marginTop: "10px", // Margin around the button
+                    marginBottom: "10px", // Margin around the button
+                    marginLeft: "2px", // Margin around the button
+                    fontSize: "16px", // Text size
+                    outline: "3px solid #F8D16D", // Darker green outline
+                    // outlineOffset: "2px", // Space between border and outline
+                    transition: "background-color 0.3s, outline-color 0.3s", // Smooth transition for hover effects
+                }}
+                onMouseOver={e => {
+                    e.currentTarget.style.backgroundColor = "#F5E6C0"; // Darker yellow on hover
+                    e.currentTarget.style.outlineColor = "#F8D16D"; // Even darker yellow outline on hover
+                }}
+                onMouseOut={e => {
+                    e.currentTarget.style.backgroundColor = "#FFFFFF"; // Reset to original green
+                    e.currentTarget.style.outlineColor = "#F8D16D"; // Reset to original outline color
+                }}
+            >
+                {useLexerParser ? "Using Lexer and Parser: Click to Use Regex" : "Using Regex: Click to Use Lexer + Parser"}
+            </button>
         {mathFields.map((latex, i) => (
             <div key={i}>
             <EditableMathField
