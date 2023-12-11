@@ -3,6 +3,7 @@ import { TextObj } from "../types";
 import { TextObjAction } from "../types";
 import { addStyles, EditableMathField, MathField } from "react-mathquill";
 import React, { useRef, useEffect, useState, Dispatch, forwardRef, useImperativeHandle } from 'react';
+import { parseLatexContent } from './latexParser'; //latex parser
 
 
 interface MathBox {
@@ -33,21 +34,33 @@ const MathBox = forwardRef(({ obj, index, dispatch }: MathBox, ref) => {
     }, [mathFields]);
 
     const downloadTexFile = () => {
-        // Join all mathFields into a single LaTeX formatted string
-        const latexContent = mathFields.join('\n');
-    
+        // Join all mathFields into a single LaTeX formatted string, add a newline at the end
+        let latexContent = mathFields.join('\n') + "\n";
+
+        latexContent = parseLatexContent(latexContent);
+
+        // REGEX IMPLEMENTATION
+        // // Replace "• text" with "\textbullet{} text \\"
+        // latexContent = latexContent.replace(/•\s*(.*?)\n/g, "\\textbullet{} $1 \\\\\n");
+
+        // // Replace "(x) text" patterns
+        // latexContent = latexContent.replace(/\((\d+)\)\s*(.*?)\n/gs, (match, number, text) => {
+        //     return `\\begin{enumerate}\n\\setcounter{enumi}{${number-1}}\n\\item ${text}\n\\end{enumerate}\n`;
+        // });
+
         // Create a blob from the LaTeX content
         const blob = new Blob([latexContent], { type: 'text/plain;charset=utf-8' });
-    
+
         // Create a download link and trigger the download
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = 'math_content.tex'; // Name of the file to be downloaded
         link.click();
-    
+
         // Clean up
         URL.revokeObjectURL(link.href);
     };
+
 
     // Expose downloadTexFile to parent
     useImperativeHandle(ref, () => ({downloadTexFile}));
