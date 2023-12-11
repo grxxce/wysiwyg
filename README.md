@@ -40,7 +40,7 @@ Run the application in development mode:
 npm run dev
 ```
 
-The app should now be running on `http://localhost:3000`.
+The app should now be running on `http://localhost:3000/editor`.
 
 ## Usage
 
@@ -58,7 +58,8 @@ Contributions to enhance the functionality or efficiency of the LaTeX editor are
 
 ## Authors
 
-- Your Name - [YourEmail@example.com](mailto:YourEmail@example.com)
+- Grace Li - [graceli@college.harvard.edu](mailto:graceli@college.harvard.edu)
+- Ivy Liang - [iliang@college.harvard.edu](mailto:iliang@college.harvard.edu)
 
 ## Version History
 
