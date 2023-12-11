@@ -8,6 +8,8 @@ import { MathField, TextField, TextObj } from "../types";
 import { useReducer } from "react";
 import { textReducer } from "../utils";
 import { InputField } from "./InputField";
+import { useRef } from 'react';
+import MathBox from './math-box';
 
 export default function EditContent() {
   const [mode, setMode] = useState<modeType>("math");
@@ -15,6 +17,7 @@ export default function EditContent() {
   const [textState, dispatch] = useReducer(textReducer, [
     { field: "MathField", text: "" },
   ]);
+  const mathBoxRef = useRef(null);
 
   addStyles();
 
@@ -60,7 +63,7 @@ export default function EditContent() {
         fontFamily: "CMU Serif",
       }}
     >
-      <Toolbar pageTitle={pageTitle} currentMode={mode} setMode={setMode} />
+      <Toolbar pageTitle={pageTitle} currentMode={mode} setMode={setMode} onDownload={() => mathBoxRef.current?.downloadTexFile()}/>
       <div className="flex flex-col mt-12 mx-32">
         <input
           className="font-[700] text-[40px] outline-none"
@@ -70,8 +73,15 @@ export default function EditContent() {
           defaultValue={pageTitle}
         />
 
+            
+
         <div className="grid space-y-2 -ml-2 w-full h-full cursor-pointer">
-          {textState.map((obj, index: number) => {
+            {textState.map((obj, index: number) => {
+            if (obj.field === "MathField") {
+                return (
+                  <MathBox ref={mathBoxRef} obj={obj} index={index} dispatch={dispatch} key={index} />
+                );
+              }
             return (
               <div key={index}>
                 <InputField obj={obj} index={index} dispatch={dispatch} />
