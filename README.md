@@ -44,7 +44,10 @@ The app should now be running on `http://localhost:3000/editor`.
 
 ## Usage
 
-Navigate through the web interface to create and edit LaTeX documents. Use the toolbar to switch between different editing modes (text, math, code) and utilize the MathQuill field for interactive formula input. The editor supports custom LaTeX commands, and you can download your work as a `.tex` file.
+Navigate through the web interface to create and edit LaTeX documents. Use the toolbar to switch between different editing modes (text, math, code) and utilize the MathQuill field for interactive formula input. The editor supports custom LaTeX commands, and you can download your work as a `.tex` file. <br>
+
+Below is a video turtorial of STaX: <br>
+https://youtu.be/Cq94UmxMses?si=YMyy781y-MvzG_2g
 
 ## Contributing
 
