@@ -72,7 +72,13 @@ type EnumerationNode = {
     value: string;
 };
 
-type ASTNode = BulletPointNode | EnumerationNode;
+type TextNode = {
+    type: 'Text';
+    value: string;
+};
+
+
+type ASTNode = BulletPointNode | EnumerationNode | TextNode;
 
 function parser(tokens: Token[]): { type: 'Root'; body: ASTNode[] } {
     let current = 0;
@@ -88,11 +94,7 @@ function parser(tokens: Token[]): { type: 'Root'; body: ASTNode[] } {
             return null; // Skip processing and move to the next token
         }
 
-        if (token.type === 'TEXT') {
-            current++;
-            return null; // Skip the text token
-        }
-
+        
         if (token.type === 'BULLET_POINT') {
             current++;
             const textToken = tokens[current];
@@ -102,7 +104,7 @@ function parser(tokens: Token[]): { type: 'Root'; body: ASTNode[] } {
                 value: textToken.value.trim(),
             };
         }
-
+        
         if (token.type === 'ENUMERATION') {
             current++;
             const number = token.value;
@@ -112,6 +114,13 @@ function parser(tokens: Token[]): { type: 'Root'; body: ASTNode[] } {
                 type: 'Enumeration',
                 number,
                 value: textToken.value.trim(),
+            };
+        }
+        if (token.type === 'TEXT') {
+            current++;
+            return {
+                type: 'Text',
+                value: token.value.trim(),
             };
         }
 
@@ -142,6 +151,8 @@ function transformAstToLatex(ast: { type: 'Root'; body: ASTNode[] }): string {
                 return `\\textbullet{} ${node.value} \\\\`;
             case 'Enumeration':
                 return `\\begin{enumerate}\n\\setcounter{enumi}{${parseInt(node.number) - 1}}\n\\item ${node.value}\n\\end{enumerate}`;
+            case 'Text':
+                return node.value;
             default:
                 return '';
         }
